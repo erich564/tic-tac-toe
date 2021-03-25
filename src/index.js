@@ -5,41 +5,36 @@ import './index.css';
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
-      {props.value}
+      {props.id}
     </button>
   );
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  renderSquare(id, col, row) {
     return (
       <Square
-        value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        id={this.props.squares[id]}
+        col={col}
+        row={row}
+        onClick={() => this.props.onClick(id)}
       />
     );
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    const jsx = [];
+    let id = 0;
+    {
+      for (let col = 1; col <= 3; col++) {
+        const squares = [];
+        for (let row = 1; row <= 3; row++) {
+          squares.push(this.renderSquare(id++, col, row));
+        }
+        jsx.push(<div className="board-row">{squares}</div>);
+      }
+    }
+    return (<div>{jsx}</div>);
   }
 }
 
@@ -55,13 +50,13 @@ class Game extends React.Component {
     }
   }
 
-  handleClick(i) {
+  handleClick(id) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    if (calculateWinner(squares) || squares[i])
+    if (calculateWinner(squares) || squares[id])
       return;
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[id] = this.state.xIsNext ? 'X' : 'O';
     this.setState({
       history: history.concat([{
         squares: squares,
