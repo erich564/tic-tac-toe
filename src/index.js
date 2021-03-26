@@ -5,18 +5,18 @@ import './index.css';
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
-      {props.id}
+      {props.value}
     </button>
   );
 }
 
 class Board extends React.Component {
-  renderSquare(id, col, row) {
+  renderSquare(id) {
     return (
       <Square
-        id={this.props.squares[id]}
-        col={col}
-        row={row}
+        id={id}
+        key={id}
+        value={this.props.squares[id]}
         onClick={() => this.props.onClick(id)}
       />
     );
@@ -25,15 +25,14 @@ class Board extends React.Component {
   render() {
     const jsx = [];
     let id = 0;
-    {
-      for (let col = 1; col <= 3; col++) {
-        const squares = [];
-        for (let row = 1; row <= 3; row++) {
-          squares.push(this.renderSquare(id++, col, row));
-        }
-        jsx.push(<div className="board-row">{squares}</div>);
+    for (let row = 1; row <= 3; row++) {
+      const squares = [];
+      for (let col = 1; col <= 3; col++) {        
+        squares.push(this.renderSquare(id++));
       }
+      jsx.push(<div className="board-row" key={row}>{squares}</div>);
     }
+
     return (<div>{jsx}</div>);
   }
 }
@@ -60,6 +59,7 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: squares,
+        squareId: id
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -78,9 +78,9 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    const moves = history.map((entry, move) => {
       const desc = move ?
-        'Go to move #' + move :
+        `Go to move #${move} ${createRowColStr(entry.squareId)}` :
         'Go to game start';
       return (
         <li key={move}>
@@ -101,7 +101,7 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
             squares={current.squares}
-            onClick={(i) => this.handleClick(i)}
+            onClick={id => this.handleClick(id)}
           />
         </div>
         <div className="game-info">
@@ -138,4 +138,10 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function createRowColStr(squareId) {
+  const row = 1+ Math.floor(squareId / 3);
+  const col = 1+ squareId % 3;
+  return `(${row}, ${col})`;
 }
