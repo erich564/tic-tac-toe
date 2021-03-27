@@ -4,7 +4,7 @@ body {
 }
 
 ol, ul {
-  padding-left: 30px;
+  padding-left: 25px;
 }
 
 .board-row:after {
@@ -53,6 +53,28 @@ ol, ul {
   margin-left: 20px;
 }
 
-.game-info button.bold {
+.history {
+  display: flex;
+  margin-top: 14px;
+}
+
+.history button.bold {
   font-weight: bold;
+}
+
+.history .sort {
+  
+}
+
+.history ol {
+  display: flex;
+  margin-top: 0;
+}
+
+ol.asc {
+  flex-direction: column;
+}
+
+ol.desc {
+  flex-direction: column-reverse;
 }

@@ -50,6 +50,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      sortAsc: true,
     }
   }
 
@@ -77,13 +78,17 @@ class Game extends React.Component {
     });
   }
 
+  invertSort() {
+    this.setState({sortAsc: !this.state.sortAsc});
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((entry, move) => {
-      const desc = move ?
+      const textGoToMove = move ?
         `Go to move #${move} ${createRowColStr(entry.squareId)}` :
         'Go to game start';
       return (
@@ -92,7 +97,7 @@ class Game extends React.Component {
             onClick={() => this.jumpTo(move)}
             className={this.state.stepNumber === move ? 'bold' : ''}
           >
-            {desc}
+            {textGoToMove}
           </button>
         </li>
       );
@@ -119,7 +124,14 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <div className="history">
+            <div className="sort">
+              <button onClick={() => this.invertSort()}>
+                {this.state.sortAsc ? '▲' : '▼'}
+              </button>
+            </div>
+            <ol className={this.state.sortAsc ? 'asc' : 'desc'}>{moves}</ol>
+          </div>
         </div>
       </div>
     );
