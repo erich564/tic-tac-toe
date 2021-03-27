@@ -5,7 +5,7 @@ import './index.css';
 function Square(props) {
   return (
     <button
-      className={'square' + (props.highlight ? ' highlight' : '')}
+      className={'square' + (props.highlight ? ' highlight' : '') + (!props.isAWinner && !props.value ? ' empty' : '')}
       onClick={props.onClick}
     >
       {props.value}
@@ -21,6 +21,7 @@ class Board extends React.Component {
         key={id}
         value={this.props.squares[id]}
         highlight={this.props.highlight && this.props.highlight.includes(id)}
+        isAWinner={!!this.props.highlight}
         onClick={() => this.props.onClick(id)}
       />
     );

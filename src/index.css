@@ -40,8 +40,8 @@ ol, ul {
   background: burlywood;
 }
 
-.kbd-navigation .square:focus {
-  background: #ddd;
+.square.empty:hover {
+  background: antiquewhite;
 }
 
 .game {
@@ -60,10 +60,6 @@ ol, ul {
 
 .history button.bold {
   font-weight: bold;
-}
-
-.history .sort {
-  
 }
 
 .history ol {
